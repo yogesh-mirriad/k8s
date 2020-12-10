@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: approval-ui
+  labels:
+    app: approval-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: approval-ui
+      mirriad: approval-ui
+  template:
+    metadata:
+      labels:
+        app: approval-ui
+        mirriad: approval-ui
+    spec:
+      containers:
+        - image: 135664556507.dkr.ecr.eu-west-1.amazonaws.com/mirriad.io/approval-ui:$VERSION
+          name: approval-ui
+          ports:
+            - containerPort: 80
+              name: approval-ui
