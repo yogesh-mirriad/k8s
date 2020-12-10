@@ -1,0 +1,10 @@
+version: '2'
+services:
+  service:
+    scale: 1
+    start_on_create: true
+  user-admin:
+    start_on_create: true
+  secrets:
+    scale: 1
+    start_on_create: true

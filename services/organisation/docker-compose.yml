@@ -1,0 +1,30 @@
+version: '2'
+volumes:
+  token:
+    driver: rancher-nfs
+services:
+  service:
+    image: mirriad/organisation:37c35605ffd823d4e538a6e5a44271420984d0ed
+    environment:
+      ADCLOUD_ENV: t01
+      BASEURI: https://t01-marketplace.mirriad.com
+      DB_HOSTNAME: t01-adcloud.cnttbcfsmwb5.eu-west-1.rds.amazonaws.com
+      DB_PASSWORD: v6Nev^IgcGg
+      DB_USERNAME: adcloud
+      server.port: '80'
+    volumes:
+    - token:/opt/vault
+    labels:
+      traefik.frontend.rule: Host:api-internal.mirriad.com;PathPrefixStrip:/organisation/
+      com.mirriad.spec.openapi: http://organisation:8080/v2/api-docs
+      traefik.port: '80'
+      traefik.enable: 'true'
+  user-admin:
+    image: rancher/dns-service
+    external_links:
+    - marketplace/user-admin-app:user-admin-app
+  secrets:
+    image: mirriad/secret-resolver:0.3.0
+    volumes:
+    - /etc/vault:/etc/vault
+    - token:/vault
